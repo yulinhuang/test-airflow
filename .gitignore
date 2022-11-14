@@ -1,0 +1,6 @@
+logs/*
+mlruns/*
+airflow-webserver.pid
+airflow.db
+fig/*
+*__pycache__*
