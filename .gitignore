@@ -4,3 +4,6 @@ airflow-webserver.pid
 airflow.db
 fig/*
 *__pycache__*
+
+data/*
+*.ipynb_checkpoints*
