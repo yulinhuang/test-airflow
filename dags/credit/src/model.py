@@ -6,10 +6,11 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 RANDOM_SEED = 42
-NB_CORES = 5
+NB_CORES = -1
 
-def _model(previous_task, **kwargs):
-    df = kwargs['ti'].xcom_pull(task_ids=previous_task)
+def _model(data_task, transformer_task, **kwargs):
+    df = kwargs['ti'].xcom_pull(task_ids=data_task)
+    transformer = kwargs['ti'].xcom_pull(task_ids=transformer_task)
 
     rf_parameters = {
         "n_estimators": 125,
@@ -34,10 +35,10 @@ def _model(previous_task, **kwargs):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 
-    model.fit(X_train, y_train)
+    model.fit(transformer.transform(X_train), y_train)
 
     # make predictions
-    yhat = model.predict(X_test)
+    yhat = model.predict(transformer.transform(X_test))
 
     mae = mean_absolute_error(y_test, yhat)
     print('MAE: %.3f' % mae)

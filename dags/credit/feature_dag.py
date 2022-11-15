@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
-from airflow  import DAG
-from airflow.operators.python import PythonOperator
 
-from credit.src.processing import _feature_engineering, _read_csv
+from airflow import DAG
+from airflow.operators.python import PythonOperator
 from credit.src.model import _model
+from credit.src.processing import _feature_engineering, _read_csv
+from credit.src.transform import _transform
 
 RAW_DATA_FOLDER = "data/raw/"
 RAW_DATA_NAME = "raw_data.csv"
@@ -64,15 +65,24 @@ with DAG(
         dag = dag
     )
 
+    transformer = PythonOperator(
+        task_id = 'transformer_task',
+        python_callable=_transform,
+        op_kwargs={
+            'previous_task': 'feature_engineering'},
+        dag = dag
+    )
+
     model = PythonOperator(
         task_id = 'training',
         python_callable=_model,
         op_kwargs={
-            'previous_task': 'feature_engineering',
+            'data_task': 'feature_engineering',
+            'transformer_task': 'transformer_task'
         },
         dag = dag
     )
 
-    read_csv >> feature_engineering >> model
+    read_csv >> feature_engineering >> transformer >> model
 
 
