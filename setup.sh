@@ -1,2 +1,2 @@
-export AIRFLOW_HOME=~/git/test-airflow/
+export AIRFLOW_HOME="$(pwd)"
 conda activate airflow
