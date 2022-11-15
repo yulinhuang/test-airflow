@@ -1,12 +1,25 @@
-import pandas as pd
+import logging
 
+import mlflow
+import mlflow.sklearn
+import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import (accuracy_score, mean_absolute_error,
+                             precision_score, recall_score)
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_absolute_error
-from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 RANDOM_SEED = 42
 NB_CORES = -1
+
+
+try:
+    # Creating an experiment 
+    mlflow.create_experiment('credit_scoring')
+except:
+    pass
+# Setting the environment with the created experiment
+mlflow.set_experiment('credit_scoring')
+
 
 def _model(data_task, transformer_task, **kwargs):
     df = kwargs['ti'].xcom_pull(task_ids=data_task)
@@ -21,11 +34,7 @@ def _model(data_task, transformer_task, **kwargs):
         "class_weight": "balanced",
     }
 
-    model = RandomForestClassifier(
-        **rf_parameters,
-        random_state=RANDOM_SEED,
-        n_jobs=NB_CORES,
-    )
+    
 
     df.drop('issue_d', axis=1, inplace=True)
     feature = df.columns[:-1]
@@ -35,16 +44,30 @@ def _model(data_task, transformer_task, **kwargs):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 
-    model.fit(transformer.transform(X_train), y_train)
+    with mlflow.start_run(run_name='RandomForest'):
+        for key, value in rf_parameters.items():
+            mlflow.log_param(key, value)
+        
+        model = RandomForestClassifier(
+            **rf_parameters,
+            random_state=RANDOM_SEED,
+            n_jobs=NB_CORES,
+        )
 
-    # make predictions
-    yhat = model.predict(transformer.transform(X_test))
+        model.fit(transformer.transform(X_train), y_train)
 
-    mae = mean_absolute_error(y_test, yhat)
-    print('MAE: %.3f' % mae)
-    accuracy = accuracy_score(y_test, yhat)
-    print('accuracy: %.3f' % accuracy)
-    precision = precision_score(y_test, yhat)
-    print('precision: %.3f' % precision)
-    recall = recall_score(y_test, yhat)
-    print('recall: %.3f' % recall)
+        # make predictions
+        yhat = model.predict(transformer.transform(X_test))
+
+        mae = mean_absolute_error(y_test, yhat)
+        print('MAE: %.3f' % mae)
+        accuracy = accuracy_score(y_test, yhat)
+        print('accuracy: %.3f' % accuracy)
+        precision = precision_score(y_test, yhat)
+        print('precision: %.3f' % precision)
+        recall = recall_score(y_test, yhat)
+        print('recall: %.3f' % recall)
+
+        mlflow.log_metric('accuracy', accuracy)
+        mlflow.log_metric('precision', precision)
+        mlflow.log_metric('recall', recall)
