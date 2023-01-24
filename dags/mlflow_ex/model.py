@@ -14,13 +14,15 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
+mlflow.set_tracking_uri('http://mlflow:5000')
+
 try:
     # Creating an experiment 
-    mlflow.create_experiment('demo_data_process_flow')
+    mlflow.create_experiment('mlflow_example')
 except:
     pass
 # Setting the environment with the created experiment
-mlflow.set_experiment('demo_data_process_flow')
+mlflow.set_experiment('mlflow_example')
 
 
 def run_model(**kwargs):

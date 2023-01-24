@@ -7,3 +7,5 @@ fig/*
 
 data/*
 *.ipynb_checkpoints*
+
+poetry.lock

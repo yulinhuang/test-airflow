@@ -7,7 +7,7 @@ from credit.src.processing import _feature_engineering, _read_csv
 from credit.src.transform import _transform
 
 RAW_DATA_FOLDER = "data/raw/"
-RAW_DATA_NAME = "raw_data.csv"
+RAW_DATA_NAME = "raw_data_short.csv"
 RAW_DATA_PATH = RAW_DATA_FOLDER + RAW_DATA_NAME
 
 PROCESSED_DATA_FOLDER = "data/processed/"
