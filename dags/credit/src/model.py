@@ -11,6 +11,7 @@ from sklearn.model_selection import train_test_split
 RANDOM_SEED = 42
 NB_CORES = -1
 
+mlflow.set_tracking_uri('http://mlflow:5000')
 
 try:
     # Creating an experiment 

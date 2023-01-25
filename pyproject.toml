@@ -1,20 +1,21 @@
 [tool.poetry]
-name = "test-airflow"
+name = "mlops"
 version = "0.1.0"
 description = "test, prototype, playgroud for airflow"
 authors = ["Yu-Lin Huang <yulinhuang23@gmail.com>"]
 readme = "README.md"
-packages = [{include = "test_airflow"}]
+packages = []
 
 [tool.poetry.dependencies]
-python = "3.10.9"
-apache-airflow = "2.4.1"
+python = "^3.10"
+apache-airflow = "^2.4.1"
 mlflow = "1.29.0"
 scikit-learn = "1.1.2"
 matplotlib = "3.6.2"
 boto3 = "^1.26.55"
 sqlalchemy = "1.4.27"
 jupyter = "^1.0.0"
+protobuf = "~3.20"
 
 
 [build-system]
