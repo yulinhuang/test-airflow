@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 # Importing MLFlow
 import mlflow
@@ -39,9 +40,12 @@ def run_model(**kwargs):
     # evaluate each model in turn
     results = []
     names = []
+    seed = int(datetime.datetime.utcnow().timestamp())
+
     for name, model in models:
         with mlflow.start_run(run_name=name):
-            kfold = StratifiedKFold(n_splits=10, random_state=1, shuffle=True)
+            mlflow.log_param('random seed', seed)
+            kfold = StratifiedKFold(n_splits=10, random_state=seed, shuffle=True)
             cv_results = cross_val_score(model, data_sets[0], data_sets[2], cv=kfold, scoring='accuracy')
             results.append(cv_results)
             names.append(name)

@@ -60,7 +60,9 @@ x-airflow-common:
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-    AIRFLOW__CORE__ENABLE_XCOM_PICKLING: 'TRUE'
+    AIRFLOW__CORE__ENABLE_XCOM_PICKLING: 'true'
+    AIRFLOW__CORE__LAZY_LOAD_PLUGINS: 'false'
+    AIRFLOW__WEBSERVER__RELOAD_ON_PLUGIN_CHANGE: 'true'
     AIRFLOW__OPERATORS__DEFAULT_RAM: '4096'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
@@ -70,6 +72,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/data:/opt/airflow/data
     - notebooks:/opt/airflow/notebooks
+    - shared-dag:/opt/airflow/dags/shared
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -110,11 +113,11 @@ services:
     entrypoint: mlflow
     command: ["server", "-h", "0.0.0.0"]
     ports:
-      - 4999:5000 # Set the host port to 4999 because mac OS is using 5000 for air reciever
+      - 5000:5000 # port 5000 maybe in conflict with mac Airplay Receiver, try port:5000 in this case
     volumes:
       - mlflow-volume:/mlflow
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:4999/health"]
+      test: ["CMD", "curl", "--fail", "http://localhost:5000/health"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -125,11 +128,19 @@ services:
       dockerfile: docker/airflow/Dockerfile
     # image: jupyter/scipy-notebook:85f615d5cafa
     entrypoint: jupyter
-    command: ["notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0"]
+    # ATTENTION: Removing notebook token because of dev environment
+    command: ["notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''"]
     ports:
       - 8888:8888 
     volumes:
       - notebooks:/opt/airflow/notebooks
+      - shared-dag:/opt/airflow/dags/shared
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8888/api"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
 
   airflow-webserver:
     <<: *airflow-common
@@ -312,3 +323,5 @@ volumes:
   postgres-db-volume:
   mlflow-volume:
   notebooks:
+  # Add this shared dag volume to get file created by notebook, maybe there is a better way to do this
+  shared-dag:
