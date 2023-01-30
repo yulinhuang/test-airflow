@@ -8,14 +8,16 @@ packages = []
 
 [tool.poetry.dependencies]
 python = "^3.10"
-apache-airflow = "^2.4.1"
+apache-airflow = "^2.5.1"
 mlflow = "1.29.0"
 scikit-learn = "1.1.2"
 matplotlib = "3.6.2"
-boto3 = "^1.26.55"
+boto3 = "^1.21.21"
 sqlalchemy = "1.4.27"
 jupyter = "^1.0.0"
 protobuf = "~3.20"
+minio = "^7.1.13"
+s3fs = "^2023.1.0"
 
 
 [build-system]

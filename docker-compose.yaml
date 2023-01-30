@@ -319,9 +319,25 @@ services:
   #     airflow-init:
   #       condition: service_completed_successfully
 
+  s3:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9099:9099"
+    expose:
+      - 9099
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - storage-minio:/data
+    command: server --address ":9099" --console-address ":9000" /data
+    restart: always # necessary since it's failing to start sometimes
+
 volumes:
   postgres-db-volume:
   mlflow-volume:
   notebooks:
   # Add this shared dag volume to get file created by notebook, maybe there is a better way to do this
   shared-dag:
+  storage-minio:

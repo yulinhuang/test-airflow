@@ -12,6 +12,11 @@ appbuilder_mitem_notebook = {
     "href": "http://localhost:8888",
     "category": "External tools",
 }
+appbuilder_mitem_minio = {
+    "name": "MinIO",
+    "href": "http://localhost:9000",
+    "category": "External tools",
+}
 # appbuilder_mitem_toplevel = {
 #     "name": "Apache",
 #     "href": "https://www.apache.org/",
@@ -24,6 +29,7 @@ class AirflowTestPlugin(AirflowPlugin):
     # appbuilder_views = [v_appbuilder_package, v_appbuilder_nomenu_package]
     appbuilder_menu_items = [
         appbuilder_mitem_mlflow, 
-        appbuilder_mitem_notebook,              
+        appbuilder_mitem_notebook,
+        appbuilder_mitem_minio,
         #  appbuilder_mitem_toplevel,
     ]
