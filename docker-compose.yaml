@@ -141,7 +141,19 @@ services:
       timeout: 10s
       retries: 5
     restart: always
-
+  
+  jupyterhub:
+    build: 
+      dockerfile: docker/jupyterhub/Dockerfile
+    # image: jupyter/scipy-notebook:85f615d5cafa
+    entrypoint: jupyterhub
+    # ATTENTION: Removing notebook token because of dev environment
+    command: ["--ip=0.0.0.0", "--port=8000"]
+    ports:
+      - 8000:8000 
+    volumes:
+      - jupyterhub-home:/home
+      
   airflow-webserver:
     <<: *airflow-common
     command: webserver
@@ -341,3 +353,4 @@ volumes:
   # Add this shared dag volume to get file created by notebook, maybe there is a better way to do this
   shared-dag:
   storage-minio:
+  jupyterhub-home:
