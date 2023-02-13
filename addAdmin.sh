@@ -1,5 +1,5 @@
 airflow users create \
-    --username admin \
+    --username airflow \
     --firstname Yu-Lin \
     --lastname Huang \
     --role Admin \

@@ -14,6 +14,9 @@ Install the packages with poetry:
 
 # Launching with docker
 
+Export requirement
+```poetry export -f requirements.txt --output requirements.txt --without-hashes```
+
 ```docker compose up -d```
 or
 ```docker compose up -d --build``` to keep track of local dag files

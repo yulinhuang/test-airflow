@@ -22,6 +22,10 @@ COPY requirements.txt /tmp/
 
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
+# RUN pip uninstall flask-login
+
+# RUN pip install flask-login:0.2.11
+
 RUN umask 0002; \
     mkdir -p /opt/airflow/notebooks; \
     mkdir -p /opt/airflow/dags/shared

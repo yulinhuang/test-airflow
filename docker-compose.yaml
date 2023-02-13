@@ -129,7 +129,7 @@ services:
     # image: jupyter/scipy-notebook:85f615d5cafa
     entrypoint: jupyter
     # ATTENTION: Removing notebook token because of dev environment
-    command: ["notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''"]
+    command: ["lab", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''"]
     ports:
       - 8888:8888 
     volumes:
@@ -141,6 +141,17 @@ services:
       timeout: 10s
       retries: 5
     restart: always
+
+  jupyterlab:
+    image: jupyter/datascience-notebook:latest
+    container_name: jupyterlab
+    entrypoint: jupyter
+    command: ["lab",]
+    ports:
+      - 8889:8888
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+      JUPYTER_TOKEN: "docker"
   
   jupyterhub:
     build: 
@@ -153,6 +164,8 @@ services:
       - 8000:8000 
     volumes:
       - jupyterhub-home:/home
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
       
   airflow-webserver:
     <<: *airflow-common
