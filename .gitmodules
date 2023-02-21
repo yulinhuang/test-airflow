@@ -1,0 +1,3 @@
+[submodule "plugins/dag_creation_interface"]
+	path = plugins/dag_creation_interface
+	url = git@github.com:yulinhuang/airflow-plugin-dci.git
