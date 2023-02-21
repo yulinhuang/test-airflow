@@ -19,3 +19,6 @@ RUN useradd -ms /bin/bash airflow
 
 RUN echo 'airflow:airflow' | chpasswd
 
+# RUN useradd -rm -d /home/airflow -s /bin/bash -g root -G sudo -u 1001 airflow
+
+# RUN echo 'airflow:airflow' | chpasswd

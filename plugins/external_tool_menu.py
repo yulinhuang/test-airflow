@@ -1,26 +1,27 @@
 # This is the class you derive to create a plugin
 from airflow.plugins_manager import AirflowPlugin
-from flask import request
+
+host = "localhost"
 
 # Creating flask appbuilder Menu Items
 appbuilder_mitem_mlflow = {
     "name": "MLFlow",
-    "href": "http://localhost:5000",
+    "href": "http://{server}:5000".format(server=host),
     "category": "External tools",
 }
 appbuilder_mitem_notebook = {
     "name": "Jupyter notebooks",
-    "href": "http://localhost:8888",
+    "href": "http://{server}:8888".format(server=host),
     "category": "External tools",
 }
 appbuilder_mitem_minio = {
     "name": "MinIO",
-    "href": "http://localhost:9000",
+    "href": "http://{server}:9000".format(server=host),
     "category": "External tools",
 }
 appbuilder_mitem_jupyterhub = {
     "name": "Jupyter Hub",
-    "href": "http://{server}:8000".format(server='localhost'),
+    "href": "http://{server}:8000".format(server=host),
     "category": "External tools",
 }
 # appbuilder_mitem_toplevel = {

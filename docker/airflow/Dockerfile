@@ -22,6 +22,8 @@ COPY requirements.txt /tmp/
 
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
+RUN jupyter contrib nbextension install --user
+
 # RUN pip uninstall flask-login
 
 # RUN pip install flask-login:0.2.11
