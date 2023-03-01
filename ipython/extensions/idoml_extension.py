@@ -1,5 +1,6 @@
 from IPython.display import Javascript, display
 from idoml_magic import IdomlMagics
+from time import sleep
 
 def _set_counts():
     display(Javascript(
@@ -60,5 +61,5 @@ def load_ipython_extension(ipython):
     Called when the extension is loaded.
     """
     cm = CountModifier(ipython)
-    ipython.events.register('post_execute', cm.post_execute)
+    ipython.events.register('post_run_cell', cm.post_run_cell)
     ipython.register_magics(IdomlMagics)

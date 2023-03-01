@@ -48,27 +48,27 @@ def _idoml_update_meta(key, value):
         """ % {'key': key, 'value': value}
     ))
 
-def _idoml_update_meta_upstrings(upstrings):
-    assert all(map(lambda t: isinstance(t, str), upstrings))
+def _idoml_update_meta_upstreams(upstreams):
+    assert all(map(lambda t: isinstance(t, str), upstreams))
     display(Javascript(
         """
         require.undef('updateIdomlMeta');
         define('updateIdomlMeta', function() {
-            return function(element, upstrings) {
+            return function(element, upstreams) {
                 var cell_element = element.parents('.cell');
                 var index = Jupyter.notebook.get_cell_elements().index(cell_element);
                 var cell = Jupyter.notebook.get_cell(index);
                 if (!cell.metadata.idoml_meta) {
                     cell.metadata.idoml_meta = new Object();
                 } 
-                cell.metadata.idoml_meta['upstrings'] = upstrings;
+                cell.metadata.idoml_meta['upstreams'] = upstreams;
             }
         });
 
         require(['updateIdomlMeta'], function(updateIdomlMeta) {
             updateIdomlMeta(element, %s);
         });
-        """ % json.dumps(upstrings)
+        """ % json.dumps(upstreams)
     ))
 
 # The class MUST call this class decorator at creation time
@@ -91,7 +91,7 @@ class IdomlMagics(Magics):
     def upstreams(self, line):
         if line:
             time.sleep(0.01)
-            _idoml_update_meta_upstrings(line.split())
+            _idoml_update_meta_upstreams(line.split())
         # self.shell.run_cell(cell)
     
     @line_cell_magic
