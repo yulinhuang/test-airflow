@@ -12,7 +12,7 @@ def _set_counts():
                 var cell = Jupyter.notebook.get_cell(index);
                 if (cell.metadata.idoml_meta && cell.metadata.idoml_meta['task_id']) {                
                     var inputElement = cell_element[0].firstChild.firstChild.firstChild;
-                    inputElement.innerHTML += '<br />[' + cell.metadata.idoml_meta['task_id'] + '] <br /> [' + cell.metadata.idoml_meta['task_type'] + ']<br />';
+                    inputElement.innerHTML = '<br />[' + cell.metadata.idoml_meta['task_id'] + '] <br /> [' + cell.metadata.idoml_meta['task_type'] + ']<br />';
                 }
             }
         });
@@ -47,7 +47,7 @@ class CountModifier(object):
         """
         Called after any code is run.
         """
-        _set_counts()
+        pass
 
     def post_run_cell(self, result):
         """

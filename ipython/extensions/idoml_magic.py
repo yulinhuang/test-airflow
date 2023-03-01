@@ -4,6 +4,7 @@ from IPython.core.magic import (Magics, magics_class, line_magic,
 from IPython.utils.capture import capture_output
 from IPython.display import Javascript, display
 import json
+import time
 
 def _set_tags(tags):
     assert all(map(lambda t: isinstance(t, str), tags))
@@ -77,15 +78,21 @@ class IdomlMagics(Magics):
     @line_magic
     def task_id(self, line):
         _idoml_update_meta('task_id', line)
+        time.sleep(0.01)
+        # self.shell.run_cell(cell)
     
     @line_magic
     def task_type(self, line):
         _idoml_update_meta('task_type', line)
-
+        time.sleep(0.01)
+        # self.shell.run_cell(cell)
+    
     @line_magic
     def upstreams(self, line):
         if line:
+            time.sleep(0.01)
             _idoml_update_meta_upstrings(line.split())
+        # self.shell.run_cell(cell)
     
     @line_cell_magic
     def tag(self, line, cell=None):
